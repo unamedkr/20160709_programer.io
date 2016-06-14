@@ -1,0 +1,12 @@
+{
+  "name": "umanji.mobile",
+  "private": true,
+  "scripts": {
+    "start": "MONGO_URL=mongodb://localhost:27017/umanji meteor",
+    "production": "MONGO_URL=mongodb://52.24.76.87:27017/umanji meteor --port 80"
+  },
+  "dependencies": {
+    "highcharts": "^4.2.5",
+    "meteor-node-stubs": "~0.2.0"
+  }
+}

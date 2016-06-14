@@ -1,0 +1,114 @@
+@import "/client/styles/import.less";
+
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: @navy;
+  color: white;
+  z-index: 1000;
+
+  .title {
+    float: left;
+    line-height: 50px;
+    font-size: 24px;
+    margin-left: 30px;
+  }
+
+  .menu-dashboard {
+    float: right;
+    line-height: 50px;
+    font-size: 18px;
+    margin-right: 30px;
+  }
+}
+
+.main-container {
+  position: relative;
+  top: 0;
+  max-width: 100%;
+  height: 100%;
+  margin: 50px auto;
+  background-color: @color-body
+}
+
+.main-left-side {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 25%;
+  // max-width: 300px;
+  height: 100%;
+  background-color: blue;
+}
+
+.main-right-side {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30%;
+  // max-width: 400px;
+  height: 100%;
+  background-color: red;
+}
+
+.main-top {
+  position: fixed;
+  top: 10px;
+  left: 25%;
+  width: 45%;
+  height: 330px;
+  background-color: @color-body;
+  z-index: 10000;
+}
+
+.main-banner {
+  position: relative;
+  width: 100%;
+  height: 70px;
+  background-color: orange;
+}
+
+.map-container {
+  width: 100%;
+  height: 250px;
+}
+
+.main-body {
+  position: relative;
+  height: 100%;
+  margin-top: 340px;
+  margin-left: 25%;
+  margin-right: 30%;
+  background-color: @color-body
+}
+
+
+.posts-container {
+
+}
+
+
+@media screen and (max-width: 480px) {
+  .main-left-side {
+    display: none;
+  }
+  .main-right-side {
+    display: none;
+  }
+  .main-top {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 280px;
+  }
+  .main-body {
+    margin-top: 290px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .map-container {
+    height: 200px;
+  }
+}

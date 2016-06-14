@@ -1,0 +1,34 @@
+
+<template name="postCard">
+  <div class="post-card">
+    <div class="post-header">
+      <span>{{type}}</span>
+      {{#each keywords}}
+        <span>#{{this}}</span>
+      {{/each}}
+
+    </div>
+
+    <p>
+      {{#autolink}}
+        {{name}}
+      {{/autolink}}
+    </p>
+
+    {{#if photo}}
+      <div class="image-panel" style="background-image: url({{photo}})">
+      </div>
+    {{/if}}
+
+    <p>{{owner.email}}</p>
+    <p>{{createdAt}}</p>
+
+    <div class="post-address">
+      <span>{{adminArea}}</span>
+      <span>{{locality}}</span>
+      <span>{{thoroughfare}}</span>
+      <span>{{featureName}}</span>
+    </div>
+
+  </div>
+</template>
