@@ -11,7 +11,7 @@ Template.main.onRendered(function() {
 
 Template.main.helpers({
   channels: function() {
-    return Channel.find({}, {sort: {createdAt: -1}});
+    return Channel.find({type: 'POST'}, {sort: {createdAt: -1}});
   },
 
   email: function() {

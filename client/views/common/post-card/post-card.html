@@ -5,13 +5,32 @@
       <span>{{name}}</span>
     </div>
 
-    <p>
-      {{#autolink}}
-        {{text}}
-      {{/autolink}}
-    </p>
+    <div class="post-body">
+      <p>
+        {{#autolink}}
+          {{text}}
+        {{/autolink}}
+      </p>
 
-    <p>{{createdAt}}</p>
+      <p>{{createdAt}}</p>
+    </div>
+    <div class="post-bottom">
+      <a href="" id="likeBtn"><span> 좋아요 </span></a> <label> {{likeCount}} </label>
+      <a href="" id="commentBtn"><span> 댓글 </span></a> <label> {{commentCount}} </label>
+    </div>
 
+    {{#if isCommentFormActive}}
+      <div class="comment-container">
+        <div class="comment-create-form">
+          <input id="commentText" type="text" placeholder="댓글을 입력하세요..."/>
+        </div>
+
+        <div class="comments">
+          {{#each comments}}
+            {{>commentCard}}
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
   </div>
 </template>

@@ -21,7 +21,7 @@ if(Meteor.isServer) {
 if(Meteor.isServer) {
   Channel.allow({
     insert() { return true },
-    update() { return false },
+    update() { return true },
     remove() { return false }
   })
 }

@@ -1,9 +1,14 @@
 
-Template.postCard.onCreated(function() { });
+Template.postCard.onCreated(function() {
+  this.isCommentFormActive = new ReactiveVar(false);
+});
 
 Template.postCard.onRendered(function() { });
 
 Template.postCard.helpers({
+  comments() {
+    return Channel.find({parent: this._id}, {sort: {createdAt: -1}})
+  },
   owner() {
     if(this.owner) {
       var oid = new Meteor.Collection.ObjectID(this.owner._str);
@@ -25,13 +30,45 @@ Template.postCard.helpers({
 
   createdAt() {
     return moment(this.createdAt).format('YYYY-MM-DD HH:mm:ss');
+  },
+
+  isCommentFormActive() {
+    return Template.instance().isCommentFormActive.get()
   }
+
 });
 
 Template.postCard.events({
-  'click #sample': function (e) {
+  'click #likeBtn': function (e) {
     e.preventDefault();
-    var code = $('#sample').val();
-    log('버턴 클릭됨');
+    var code = $('#likeBtn').val();
+
+    Meteor.call('like', this._id)
+  },
+
+  'click #commentBtn': function (e, t) {
+    e.preventDefault();
+
+    var isCommentFormActive = t.isCommentFormActive.get();
+    if(isCommentFormActive) {
+      t.isCommentFormActive.set(false)
+    }else {
+      t.isCommentFormActive.set(true)
+    }
+  },
+
+  'keyup #commentText': function (e) {
+    e.preventDefault();
+
+    if(e.which == 13) {
+      var text = $('#commentText').val();
+
+      var post = {
+        text: text
+      }
+
+      Meteor.call('comment', this._id, post)
+      $('#commentText').val('')
+    }
   }
 });

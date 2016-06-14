@@ -1,0 +1,21 @@
+
+<template name="commentCard">
+  <div class="comment-card">
+    <div class="comment-header">
+      <span>{{name}}</span>
+    </div>
+
+    <div class="comment-body">
+      <p>
+        {{#autolink}}
+          {{text}}
+        {{/autolink}}
+      </p>
+
+      <p>{{createdAt}}</p>
+    </div>
+    <div class="comment-bottom">
+      <a href="" id="likeCommentBtn"><span> 좋아요 </span></a> <label> {{likeCount}} </label>
+    </div>
+  </div>
+</template>
