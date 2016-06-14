@@ -72,6 +72,49 @@
 
 }
 
+.post-create-form {
+  height: auto;
+  color: white;
+  margin: 10px;
+  color: @color-text;
+  background-color: white;
+
+  .post-create-form-header {
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px solid @gray-light;
+
+  }
+
+  .post-create-form-body {
+
+    textarea {
+      border-width: 0px;
+      font-size: 16px;
+      width: 100%;
+      padding: 10px;
+    }
+  }
+
+  .post-create-form-bottom {
+    height: 50px;
+    padding: 10px;
+
+
+    button {
+      background-color: @brand;
+      width: 100px;
+      height: 30px;
+      border-width: 0px;
+      color: white;
+    }
+
+    button[disabled="disabled"] {
+      background-color: @gray-light;
+    }
+  }
+}
+
 
 @media screen and (max-width: 900px) {
   .main-left-side {

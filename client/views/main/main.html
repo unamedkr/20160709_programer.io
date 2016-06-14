@@ -1,16 +1,31 @@
 
 <template name="main">
-
   <div class="main-header">
     <div class="title"> programer.io </div>
-    <a class="menu-dashboard" href="/dash"> Dashboard </a>
+
+    <a class="menu-dashboard" href="/dash">Dashboard </a>
+
+    {{#if currentUser}}
+      <a id="logout" class="menu-dashboard" href="">Logout </a>
+    {{/if}}
+
   </div>
 
   <div class="main-container">
     <div class="main-left-side">
     </div>
-
     <div class="main-body">
+      <div id="postCreateForm" class="post-create-form">
+        <div class="post-create-form-header">
+        </div>
+        <div class="post-create-form-body">
+          <textarea id="post-create-textarea" placeholder="무슨 생각을 하고 계신가요?"></textarea>
+        </div>
+        <div class="post-create-form-bottom">
+          <button id="postCreateBtn" disabled="disabled">등록</button>
+        </div>
+      </div>
+
       <div class="posts-container">
         {{#each channels}}
           {{>postCard}}

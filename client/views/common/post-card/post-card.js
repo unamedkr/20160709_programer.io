@@ -12,7 +12,9 @@ Template.postCard.helpers({
       return {}
     }
   },
-
+  name() {
+    return this.owner.username? this.owner.username : this.owner.emails[0].address
+  },
   photo() {
     if(this.photos[0]) {
       return this.photos[0];

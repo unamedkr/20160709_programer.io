@@ -2,17 +2,15 @@
 <template name="postCard">
   <div class="post-card">
     <div class="post-header">
-      <span>{{type}}</span>
+      <span>{{name}}</span>
     </div>
 
     <p>
       {{#autolink}}
-        {{name}}
+        {{text}}
       {{/autolink}}
     </p>
 
-
-    <p>{{owner.email}}</p>
     <p>{{createdAt}}</p>
 
   </div>

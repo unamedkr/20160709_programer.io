@@ -1,0 +1,34 @@
+<template name="signModal">
+  <div class="modal fade" id="signModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          {{#unless isLoginPage}}
+            <input id="username" type="text" placeholder="이름">
+          {{/unless}}
+
+          <input id="email" type="email" placeholder="email">
+          <input id="password" type="password" placeholder="password">
+        </div>
+        <div class="modal-footer">
+
+          {{#if isLoginPage}}
+            <a href="" class="link" id="toSignupPage">회원가입</a>
+          {{else}}
+            <a href="" class="link" id="toLoginPage">로그인</a>
+          {{/if}}
+
+
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+          {{#if isLoginPage}}
+            <button type="button" id="loginBtn" class="btn btn-primary">로그인</button>
+          {{else}}
+            <button type="button" id="registerBtn" class="btn btn-primary">회원가입</button>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
