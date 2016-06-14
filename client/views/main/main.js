@@ -1,3 +1,4 @@
+var whichByKeyup = 0;
 
 Template.main.onCreated(function() {
   this.subscribe('users');
@@ -50,8 +51,24 @@ Template.main.events({
     Meteor.logout();
   },
 
+  'keydown #post-create-textarea': function(e, t) {
+    whichByKeyup = e.which
+  },
+
   'keyup #post-create-textarea': function (e, t) {
     e.preventDefault();
+
+    if(e.which == 16 && whichByKeyup == 13) {
+      var post = {
+        type: 'POST',
+        owner: Meteor.user(),
+        text: $('#post-create-textarea').val(),
+        createdAt: new Date(),
+      }
+
+      $('#post-create-textarea').val('')
+      Channel.insert(post)
+    }
 
     var text = $('#post-create-textarea').val()
     if(text) {
@@ -63,7 +80,6 @@ Template.main.events({
     e.target.style.height = "1px";
     e.target.style.height = (20 + e.target.scrollHeight)+"px";
   },
-
 
 });
 
