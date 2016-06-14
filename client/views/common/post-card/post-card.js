@@ -63,12 +63,14 @@ Template.postCard.events({
     if(e.which == 13) {
       var text = $('#commentText').val();
 
-      var post = {
-        text: text
-      }
+      if(text) {
+        var post = {
+          text: text
+        }
 
-      Meteor.call('comment', this._id, post)
-      $('#commentText').val('')
+        Meteor.call('comment', this._id, post)
+        $('#commentText').val('')
+      }
     }
   }
 });
