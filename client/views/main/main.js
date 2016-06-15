@@ -29,10 +29,11 @@ Template.main.helpers({
   },
 
   mapOptions() {
+    console.log('mapOptions....')
     var latLng = Geolocation.latLng();
     if(GoogleMaps.loaded() && latLng) {
       return {
-        center: Geolocation.latLng(),
+        center: latLng,
         zoom: 5,
         mapTypeControl: false,
         streetViewControl: false,
