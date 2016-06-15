@@ -52,8 +52,8 @@ Template.main.events({
       type: 'POST',
       owner: Meteor.user(),
       text: $('#post-create-textarea').val(),
-      latitude: latLng.lat,
-      longitude: latLng.lng,
+      latitude: latLng.lat? latLng.lat : null,
+      longitude: latLng.lng? latLng.lng : null,
       createdAt: new Date(),
     }
 
@@ -90,8 +90,8 @@ Template.main.events({
         type: 'POST',
         owner: Meteor.user(),
         text: $('#post-create-textarea').val(),
-        latitude: latLng.lat,
-        longitude: latLng.lng,
+        latitude: latLng.lat? latLng.lat : null,
+        longitude: latLng.lng? latLng.lng : null,
         createdAt: new Date(),
       }
 
