@@ -52,9 +52,12 @@ Template.main.events({
       type: 'POST',
       owner: Meteor.user(),
       text: $('#post-create-textarea').val(),
-      latitude: latLng.lat? latLng.lat : null,
-      longitude: latLng.lng? latLng.lng : null,
       createdAt: new Date(),
+    }
+
+    if(latLng) {
+      post.latitude = latLng.lat;
+      post.longitude = latLng.lng;
     }
 
     $('#post-create-textarea').val('')
@@ -90,9 +93,12 @@ Template.main.events({
         type: 'POST',
         owner: Meteor.user(),
         text: $('#post-create-textarea').val(),
-        latitude: latLng.lat? latLng.lat : null,
-        longitude: latLng.lng? latLng.lng : null,
         createdAt: new Date(),
+      }
+
+      if(latLng) {
+        post.latitude = latLng.lat;
+        post.longitude = latLng.lng;
       }
 
       $('#post-create-textarea').val('')
@@ -143,11 +149,12 @@ function findMainPosts(gmap) {
     }
   }
 
-  query.set({
-    latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
-    longitude:  { $gte: latLng.lng.min, $lte: latLng.lng.max},
-  })
-
+  if(latLng) {
+    query.set({
+      latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
+      longitude:  { $gte: latLng.lng.min, $lte: latLng.lng.max},
+    })
+  }
 
   Meteor.subscribe('findMainPosts', query.get())
 }
