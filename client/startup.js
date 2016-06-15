@@ -1,6 +1,6 @@
 loadGoogleMaps = function() {
-  GoogleMaps.load({v: '3'});
-  // GoogleMaps.load({v: '3', key: 'AIzaSyASknnWthmBRsV_UB16MX0fHeuf6jcCHzY'});
+  // GoogleMaps.load({v: '3'});
+  GoogleMaps.load({v: '3', key: 'AIzaSyBzTOuFxTqjDHvrfFrB9kysq_ZjBdr-gE0'});
 }
 
 Meteor.startup(function() {
