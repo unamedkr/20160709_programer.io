@@ -1,23 +1,47 @@
-var whichByKeyup = 0;
+var query = new ReactiveVar({});
 
+var whichByKeyup = 0;
+var isFirstLoad = true;
+var currentPosition = {};
+var gmap = {}
 Template.main.onCreated(function() {
   this.subscribe('users');
-  this.subscribe('channels');
+
+  GoogleMaps.ready('mainMap', function(map) {
+    console.log('ready')
+    toCurrentPosition(map.instance)
+    // TODO: init
+    gmap = map.instance;
+    initGMapListener(map.instance);
+  });
 });
 
 Template.main.onRendered(function() {
-
 });
 
 Template.main.helpers({
-  channels: function() {
-    return Channel.find({type: 'POST'}, {sort: {createdAt: -1}});
+  channels() {
+    var tQuery = query.get();
+    tQuery.type = 'POST';
+    return Channel.find(tQuery, {sort: {createdAt: -1}});
   },
 
-  email: function() {
+  email() {
     return Meteor.user().emails[0].address
-  }
+  },
 
+  mapOptions() {
+    if(GoogleMaps.loaded()) {
+      return {
+        center: new google.maps.LatLng(37.642443934398, 126.977429352700),
+        zoom: 5,
+        mapTypeControl: false,
+        streetViewControl: false,
+        zoomControl: true,
+        scaleControl: false
+      }
+    }
+  }
 });
 
 Template.main.events({
@@ -28,6 +52,8 @@ Template.main.events({
       type: 'POST',
       owner: Meteor.user(),
       text: $('#post-create-textarea').val(),
+      latitude: currentPosition.lat,
+      longitude: currentPosition.lng,
       createdAt: new Date(),
     }
 
@@ -63,6 +89,8 @@ Template.main.events({
         type: 'POST',
         owner: Meteor.user(),
         text: $('#post-create-textarea').val(),
+        latitude: currentPosition.lat,
+        longitude: currentPosition.lng,
         createdAt: new Date(),
       }
 
@@ -84,8 +112,80 @@ Template.main.events({
 });
 
 
+function toCurrentPosition(gmap) {
+  if (navigator.geolocation) {
+    isFirstLoad = false
+    navigator.geolocation.getCurrentPosition(function(position) {
+      currentPosition = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      gmap.setCenter(currentPosition);
+
+      var myloc = new google.maps.Marker({
+          clickable: false,
+          icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+                                                          new google.maps.Size(22,22),
+                                                          new google.maps.Point(0,18),
+                                                          new google.maps.Point(11,11)),
+          position: new google.maps.LatLng(currentPosition.lat, currentPosition.lng),
+          zIndex: 999,
+          map: gmap
+      });
+
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+
+function findMainPosts(gmap) {
+  var bounds = gmap.getBounds();
+  var latLng = {
+    lat: {
+      min: bounds.H.H,
+      max: bounds.H.j
+    },
+    lng: {
+      min: bounds.j.j,
+      max: bounds.j.H
+    }
+  }
+
+  query.set({
+    latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
+    longitude:  { $gte: latLng.lng.min, $lte: latLng.lng.max},
+  })
+
+
+  console.log('findMainPosts', query.get())
+  Meteor.subscribe('findMainPosts', query.get())
+}
 
 
 /********************************************
 * private functions
 *********************************************/
+
+function initGMapListener(gmap) {
+
+  gmap.addListener('dragend', function(map) {
+    findMainPosts(gmap);
+  });
+
+  gmap.addListener('tilesloaded', function(map) {
+    console.log('tilesloaded');
+  });
+
+  gmap.addListener('bounds_changed', function() {
+    console.log('bounds_changed');
+  });
+
+
+  findMainPosts(gmap);
+}

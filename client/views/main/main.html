@@ -17,10 +17,10 @@
         <div class="post-create-form-header">
         </div>
         <div class="post-create-form-body">
-          <textarea id="post-create-textarea" placeholder="무슨 생각을 하고 계신가요?"></textarea>
+          <textarea id="post-create-textarea" placeholder="What's up?"></textarea>
         </div>
         <div class="post-create-form-bottom">
-          <button id="postCreateBtn" disabled="disabled">등록 (Shift+Enter)</button>
+          <button id="postCreateBtn" disabled="disabled">Submit (Shift+Enter)</button>
 
         </div>
       </div>
@@ -33,6 +33,9 @@
     </div>
 
     <div class="main-right-side">
+      <div class="map-container">
+        {{> googleMap name="mainMap" options=mapOptions}}
+      </div>
     </div>
   </div>
 </template>
