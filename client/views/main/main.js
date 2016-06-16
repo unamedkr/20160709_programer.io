@@ -29,7 +29,7 @@ Template.main.helpers({
   },
 
   mapOptions() {
-    if(GoogleMaps.loaded() && latLng) {
+    if(GoogleMaps.loaded()) {
       var center = {};
 
       if(Geolocation.latLng()) {
