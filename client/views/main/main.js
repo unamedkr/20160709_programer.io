@@ -3,6 +3,7 @@ var query = new ReactiveVar({});
 var whichByKeyup = 0;
 var isFirstLoad = true;
 var gmap = {}
+var currentPosition = null;
 Template.main.onCreated(function() {
   this.subscribe('users');
 
@@ -31,6 +32,31 @@ Template.main.helpers({
   mapOptions() {
     if(GoogleMaps.loaded()) {
       var center = {};
+
+
+      console.log('navigator.geolocation', navigator.geolocation)
+      console.log('navigator.geolocation', navigator.geolocation)
+
+
+
+
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          console.log('getCurrentPosition', pos)
+        }, function() {
+          console.log('error 1')
+        });
+      } else {
+        console.log('error 2')
+      }
+
+
 
       if(Geolocation.latLng()) {
         center = Geolocation.latLng();
@@ -144,9 +170,7 @@ function toCurrentPosition(gmap) {
 
 
 function findMainPosts(gmap) {
-  console.log('gmap', gmap);
   var bounds = gmap.getBounds();
-  console.log('bounds', bounds);
   var latLng = {
     lat: {
       min: bounds.H.H,
