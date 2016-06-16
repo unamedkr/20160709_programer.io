@@ -8,7 +8,6 @@ Template.main.onCreated(function() {
   this.subscribe('users');
 
   GoogleMaps.ready('mainMap', function(map) {
-    toCurrentPosition(map.instance)
     // TODO: init
     gmap = map.instance;
     initGMapListener(map.instance);
@@ -60,14 +59,8 @@ Template.main.events({
       owner: Meteor.user(),
       text: $('#post-create-textarea').val(),
       createdAt: new Date(),
-    }
-
-    var latLng = Geolocation.latLng();
-    if(latLng) {
-      post.latitude = latLng.lat;
-      post.longitude = latLng.lng;
-    } else {
-
+      latitude: gmap.getCenter().lat(),
+      longitude: gmap.getCenter().lng()
     }
 
     $('#post-create-textarea').val('')
@@ -98,20 +91,14 @@ Template.main.events({
     e.preventDefault();
 
     if(e.which == 16 && whichByKeyup == 13) {
-      var latLng = Geolocation.latLng();
       var post = {
         type: 'POST',
         owner: Meteor.user(),
         text: $('#post-create-textarea').val(),
         createdAt: new Date(),
+        latitude: gmap.getCenter().lat(),
+        longitude: gmap.getCenter().lng()
       }
-
-      if(latLng) {
-        post.latitude = latLng.lat;
-        post.longitude = latLng.lng;
-      }
-
-      console.log('gmap.getCenter()', gmap.getCenter());
 
       $('#post-create-textarea').val('')
       Channel.insert(post)
@@ -134,14 +121,14 @@ Template.main.events({
 function toCurrentPosition(gmap) {
   isFirstLoad = false
 
-  var latLng = Geolocation.latLng();
   var myloc = new google.maps.Marker({
       clickable: false,
       icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
                                                       new google.maps.Size(22,22),
                                                       new google.maps.Point(0,18),
                                                       new google.maps.Point(11,11)),
-      position: latLng,
+
+      position: new google.maps.LatLng(gmap.getCenter().lat(), gmap.getCenter().lng()),
       zIndex: 999,
       map: gmap
   });
@@ -180,6 +167,7 @@ function initGMapListener(gmap) {
 
   gmap.addListener('dragend', function(map) {
     findMainPosts(gmap);
+    toCurrentPosition(gmap);
   });
 
   gmap.addListener('tilesloaded', function(map) {
@@ -192,4 +180,5 @@ function initGMapListener(gmap) {
 
 
   findMainPosts(gmap);
+  toCurrentPosition(gmap);
 }
