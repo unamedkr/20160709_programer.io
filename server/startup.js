@@ -6,16 +6,11 @@
 
 Meteor.startup(function() {
 
-  SSLProxy({
-     port: 443, //or 443 (normal port/requires sudo)
-     ssl : {
-          key: Assets.getText("privkey.pem"),
-          cert: Assets.getText("fullchain.pem"),
-
-          //Optional CA
-          //Assets.getText("ca.pem")
-     }
-  });
+  try {
+    SSL('/root/programer.io/private/privkey.pem','/root/programer.io/private/fullchain.pem', 443);
+  } catch(e) {
+    console.log("error ", e);
+  }
 
 
   if(Channel.find().count() < 1) {
