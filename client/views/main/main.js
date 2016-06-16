@@ -150,6 +150,7 @@ function findMainPosts(gmap) {
     }
   }
 
+  console.log('bounds', bounds);
   if(latLng) {
     query.set({
       latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
