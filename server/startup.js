@@ -7,7 +7,7 @@
 Meteor.startup(function() {
 
   SSLProxy({
-     port: 3000, //or 443 (normal port/requires sudo)
+     port: 443, //or 443 (normal port/requires sudo)
      ssl : {
           key: Assets.getText("privkey.pem"),
           cert: Assets.getText("fullchain.pem"),
