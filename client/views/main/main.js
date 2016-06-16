@@ -33,31 +33,6 @@ Template.main.helpers({
     if(GoogleMaps.loaded()) {
       var center = {};
 
-
-      console.log('navigator.geolocation', navigator.geolocation)
-      console.log('navigator.geolocation', navigator.geolocation)
-
-
-
-
-      // Try HTML5 geolocation.
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-
-          console.log('getCurrentPosition', pos)
-        }, function() {
-          console.log('error 1')
-        });
-      } else {
-        console.log('error 2')
-      }
-
-
-
       if(Geolocation.latLng()) {
         center = Geolocation.latLng();
       } else {
@@ -80,7 +55,6 @@ Template.main.events({
 
   'click #postCreateBtn': function (e, t) {
     e.preventDefault();
-    var latLng = Geolocation.latLng();
     var post = {
       type: 'POST',
       owner: Meteor.user(),
@@ -88,9 +62,12 @@ Template.main.events({
       createdAt: new Date(),
     }
 
+    var latLng = Geolocation.latLng();
     if(latLng) {
       post.latitude = latLng.lat;
       post.longitude = latLng.lng;
+    } else {
+
     }
 
     $('#post-create-textarea').val('')
@@ -133,6 +110,8 @@ Template.main.events({
         post.latitude = latLng.lat;
         post.longitude = latLng.lng;
       }
+
+      console.log('gmap.getCenter()', gmap.getCenter());
 
       $('#post-create-textarea').val('')
       Channel.insert(post)
@@ -182,7 +161,6 @@ function findMainPosts(gmap) {
     }
   }
 
-  console.log('bounds', bounds);
   if(bounds) {
     query.set({
       latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
