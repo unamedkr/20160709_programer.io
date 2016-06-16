@@ -15,7 +15,12 @@ Template.commentCard.helpers({
     }
   },
   name() {
-    return this.owner.username? this.owner.username : this.owner.emails[0].address
+    if(this.owner) {
+      return this.owner.username? this.owner.username : this.owner.emails[0].address
+    } else {
+      return "";
+    }
+
   },
   photo() {
     if(this.photos[0]) {
