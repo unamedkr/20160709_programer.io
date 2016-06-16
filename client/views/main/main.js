@@ -29,11 +29,17 @@ Template.main.helpers({
   },
 
   mapOptions() {
-    console.log('mapOptions....')
-    var latLng = Geolocation.latLng();
     if(GoogleMaps.loaded() && latLng) {
+      var center = {};
+
+      if(Geolocation.latLng()) {
+        center = Geolocation.latLng();
+      } else {
+        center = new google.maps.LatLng(37.642443934398, 126.977429352700)
+      }
+
       return {
-        center: latLng,
+        center: center,
         zoom: 5,
         mapTypeControl: false,
         streetViewControl: false,
@@ -138,7 +144,9 @@ function toCurrentPosition(gmap) {
 
 
 function findMainPosts(gmap) {
+  console.log('gmap', gmap);
   var bounds = gmap.getBounds();
+  console.log('bounds', bounds);
   var latLng = {
     lat: {
       min: bounds.H.H,
@@ -151,7 +159,7 @@ function findMainPosts(gmap) {
   }
 
   console.log('bounds', bounds);
-  if(latLng) {
+  if(bounds) {
     query.set({
       latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
       longitude:  { $gte: latLng.lng.min, $lte: latLng.lng.max},
