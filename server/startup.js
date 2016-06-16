@@ -6,15 +6,6 @@
 
 Meteor.startup(function() {
 
-  // SSLProxy({
-  //    port: 6000, //or 443 (normal port/requires sudo)
-  //    ssl : {
-  //       key: Assets.getText("key.txt"),
-  //       cert: Assets.getText("csr.txt")
-  //    }
-  // });
-
-
   if(Channel.find().count() < 1) {
     var user = {
       type: "POST",
