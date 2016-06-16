@@ -1,4 +1,7 @@
 var query = new ReactiveVar({});
+var address = new ReactiveVar("");
+
+
 
 var whichByKeyup = 0;
 var isFirstLoad = true;
@@ -7,7 +10,6 @@ var currentPosition = null;
 var prevCenterMarker = null;
 Template.main.onCreated(function() {
   this.subscribe('users');
-
   GoogleMaps.ready('mainMap', function(map) {
     // TODO: init
     gmap = map.instance;
@@ -19,6 +21,10 @@ Template.main.onRendered(function() {
 });
 
 Template.main.helpers({
+  address() {
+    return address.get()
+  },
+
   channels() {
     var tQuery = query.get();
     tQuery.type = 'POST';
@@ -125,7 +131,7 @@ function toCurrentPosition(gmap) {
   if(prevCenterMarker) {
     prevCenterMarker.setMap(null);
   }
-  
+
   prevCenterMarker = new google.maps.Marker({
       clickable: false,
       icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
@@ -163,9 +169,23 @@ function findMainPosts(gmap) {
   Meteor.subscribe('findMainPosts', query.get())
 }
 
+function getAddress(gmap) {
+  var center = {
+    lat: gmap.getCenter().lat(),
+    lng: gmap.getCenter().lng()
+  }
+  Meteor.call('address', center, function(err, data) {
+    console.log('result', data)
+
+    if(data && data.formattedAddress) {
+      address.set(data.formattedAddress.substr(data.formattedAddress.indexOf(',')+1));
+    }
+
+  })
+}
 
 /********************************************
-* private functions
+* map init functions
 *********************************************/
 
 function initGMapListener(gmap) {
@@ -173,6 +193,7 @@ function initGMapListener(gmap) {
   gmap.addListener('dragend', function(map) {
     findMainPosts(gmap);
     toCurrentPosition(gmap);
+    getAddress(gmap);
   });
 
   gmap.addListener('tilesloaded', function(map) {
@@ -186,4 +207,5 @@ function initGMapListener(gmap) {
 
   findMainPosts(gmap);
   toCurrentPosition(gmap);
+  getAddress(gmap);
 }

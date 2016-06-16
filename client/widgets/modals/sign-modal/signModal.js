@@ -1,10 +1,14 @@
 Template.signModal.onCreated(function() {
   this.isLoginPage = new ReactiveVar(true);
+  this.errorLabel = new ReactiveVar(null);
 });
 
 Template.signModal.helpers({
   isLoginPage: function() {
     return Template.instance().isLoginPage.get();
+  },
+  errorLabel: function() {
+    return Template.instance().errorLabel.get();
   }
 });
 
@@ -26,9 +30,13 @@ Template.signModal.events({
 
     Meteor.loginWithPassword(user.email, user.password, function(error) {
       console.log('loginWithPassword error', error)
+      if(error) {
+        template.errorLabel.set('login fail - ' + error.reason);
+      }else {
+        template.errorLabel.set(null);
+        $('#signModal').modal('hide');
+      }
     })
-
-    $('#signModal').modal('hide');
   },
 
   'click #registerBtn': function (event, template) {
@@ -40,10 +48,17 @@ Template.signModal.events({
     }
 
     Accounts.createUser(user, function(error) {
-      console.log('createUser error', error)
+
+      if(error) {
+        template.errorLabel.set('create fail - ' + error.reason);
+      } else {
+        sAlert.success('success create user!', {position: 'top', timeout: 4000});
+        template.errorLabel.set(null);
+        $('#signModal').modal('hide');
+      }
     });
 
-    $('#signModal').modal('hide');
+
   },
 
 });

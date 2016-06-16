@@ -9,6 +9,10 @@
 
           <input id="email" type="email" placeholder="email" autofocus="autofocus">
           <input id="password" type="password" placeholder="password">
+
+          {{#if errorLabel}}
+            <label id="errorLabel" class="error-label">{{errorLabel}}</label>
+          {{/if}}
         </div>
         <div class="modal-footer">
 
