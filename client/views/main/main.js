@@ -4,6 +4,7 @@ var whichByKeyup = 0;
 var isFirstLoad = true;
 var gmap = {}
 var currentPosition = null;
+var prevCenterMarker = null;
 Template.main.onCreated(function() {
   this.subscribe('users');
 
@@ -121,7 +122,11 @@ Template.main.events({
 function toCurrentPosition(gmap) {
   isFirstLoad = false
 
-  var myloc = new google.maps.Marker({
+  if(prevCenterMarker) {
+    prevCenterMarker.setMap(null);
+  }
+  
+  prevCenterMarker = new google.maps.Marker({
       clickable: false,
       icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
                                                       new google.maps.Size(22,22),
