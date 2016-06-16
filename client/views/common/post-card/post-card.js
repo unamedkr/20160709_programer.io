@@ -70,8 +70,13 @@ Template.postCard.events({
 
       if(text) {
         var post = {
-          text: text
+          text: text,
+          latitude: this.latitude,
+          longitude: this.longitude
         }
+
+        console.log('post: ', post);
+
 
         Meteor.call('comment', this._id, post)
         $('#commentText').val('')
