@@ -22,7 +22,7 @@ Template.main.onRendered(function() {
 
 Template.main.helpers({
   address() {
-    return address.get()
+    return address.get();
   },
 
   channels() {
@@ -175,12 +175,9 @@ function getAddress(gmap) {
     lng: gmap.getCenter().lng()
   }
   Meteor.call('address', center, function(err, data) {
-    console.log('result', data)
-
     if(data && data.formattedAddress) {
       address.set(data.formattedAddress.substr(data.formattedAddress.indexOf(',')+1));
     }
-
   })
 }
 
@@ -191,6 +188,14 @@ function getAddress(gmap) {
 function initGMapListener(gmap) {
 
   gmap.addListener('dragend', function(map) {
+    findMainPosts(gmap);
+    toCurrentPosition(gmap);
+    getAddress(gmap);
+  });
+
+  gmap.addListener('click', function(position) {
+
+    gmap.setCenter(position.latLng);
     findMainPosts(gmap);
     toCurrentPosition(gmap);
     getAddress(gmap);
