@@ -51,16 +51,16 @@
   // max-width: 400px;
   height: 100%;
   background-color: @gray-light;
+}
 
-  .map-info-panel {
-    height: auto;
-    background-color: @dark-gray;
-    padding: 10px;
-    margin-top: 10px;
+.map-info-panel {
+  height: auto;
+  background-color: @dark-gray;
+  padding: 10px;
+  margin-top: 10px;
 
-    span {
-      color: white;
-    }
+  span {
+    color: white;
   }
 }
 
@@ -134,8 +134,15 @@
   }
 }
 
+.map-pannel {
+  display: none;
+}
 
 @media screen and (max-width: 900px) {
+  .map-pannel {
+    display: block;
+  }
+
   .main-left-side {
     display: none;
   }

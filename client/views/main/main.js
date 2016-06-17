@@ -1,6 +1,6 @@
 var query = new ReactiveVar({});
 var address = new ReactiveVar("");
-
+var width = new ReactiveVar(null);
 
 
 var whichByKeyup = 0;
@@ -8,19 +8,35 @@ var isFirstLoad = true;
 var gmap = {}
 var currentPosition = null;
 var prevCenterMarker = null;
-Template.main.onCreated(function() {
-  this.subscribe('users');
+
+
+Template.googleMap.onRendered(function(){
   GoogleMaps.ready('mainMap', function(map) {
     // TODO: init
     gmap = map.instance;
     initGMapListener(map.instance);
   });
+})
+
+Template.main.onCreated(function() {
+  this.subscribe('users');
 });
 
 Template.main.onRendered(function() {
+  $(window).resize(function() {
+    console.log($(window).width());
+    width.set($(window).width())
+  });
 });
 
 Template.main.helpers({
+  isMobileSize() {
+    if(!width.get()) {
+      width.set(window.innerWidth || document.body.clientWidth)
+    }
+    return width.get() < 900;
+  },
+
   address() {
     return address.get();
   },

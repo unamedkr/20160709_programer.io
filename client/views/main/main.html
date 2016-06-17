@@ -13,6 +13,16 @@
     <div class="main-left-side">
     </div>
     <div class="main-body">
+      {{#if isMobileSize}}
+        <div class="map-pannel">
+          <div class="map-container">
+            {{> googleMap name="mainMap" options=mapOptions}}
+          </div>
+          <div class="map-info-panel">
+            <span>{{address}}</span>
+          </div>
+        </div>
+      {{/if}}
       <div id="postCreateForm" class="post-create-form">
         <div class="post-create-form-header">
         </div>
@@ -32,13 +42,15 @@
       </div>
     </div>
 
-    <div class="main-right-side">
-      <div class="map-container">
-        {{> googleMap name="mainMap" options=mapOptions}}
+    {{#unless isMobileSize}}
+      <div class="main-right-side">
+        <div class="map-container">
+          {{> googleMap name="mainMap" options=mapOptions}}
+        </div>
+        <div class="map-info-panel">
+          <span>{{address}}</span>
+        </div>
       </div>
-      <div class="map-info-panel">
-        <span>{{address}}</span>
-      </div>
-    </div>
+    {{/unless}}
   </div>
 </template>
