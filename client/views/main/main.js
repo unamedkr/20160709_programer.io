@@ -24,12 +24,15 @@ Template.main.onCreated(function() {
 
 Template.main.onRendered(function() {
   $(window).resize(function() {
-    console.log($(window).width());
     width.set($(window).width())
   });
 });
 
 Template.main.helpers({
+  isGeolocation() {
+    return Geolocation != null && Geolocation.latLng() != null
+  },
+
   isMobileSize() {
     if(!width.get()) {
       width.set(window.innerWidth || document.body.clientWidth)
@@ -74,6 +77,24 @@ Template.main.helpers({
 });
 
 Template.main.events({
+  'click #here': function(e, t) {
+    gmap.setCenter(Geolocation.latLng())
+
+    if(prevCenterMarker) {
+      prevCenterMarker.setMap(null);
+    }
+    prevCenterMarker = new google.maps.Marker({
+        clickable: false,
+        icon: new google.maps.MarkerImage('//maps.gstatic.com/mapfiles/mobile/mobileimgs2.png',
+                                                        new google.maps.Size(22,22),
+                                                        new google.maps.Point(0,18),
+                                                        new google.maps.Point(11,11)),
+
+        position: Geolocation.latLng(),
+        zIndex: 999,
+        map: gmap
+    });
+  },
 
   'click #postCreateBtn': function (e, t) {
     e.preventDefault();
@@ -218,11 +239,9 @@ function initGMapListener(gmap) {
   });
 
   gmap.addListener('tilesloaded', function(map) {
-    console.log('tilesloaded');
   });
 
   gmap.addListener('bounds_changed', function() {
-    console.log('bounds_changed');
   });
 
 

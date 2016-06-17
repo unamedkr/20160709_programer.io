@@ -16,6 +16,9 @@
       {{#if isMobileSize}}
         <div class="map-pannel">
           <div class="map-container">
+            {{#if isGeolocation}}
+              <button id="here">here</button>
+            {{/if}}
             {{> googleMap name="mainMap" options=mapOptions}}
           </div>
           <div class="map-info-panel">
@@ -45,6 +48,9 @@
     {{#unless isMobileSize}}
       <div class="main-right-side">
         <div class="map-container">
+          {{#if isGeolocation}}
+            <button id="here">here</button>
+          {{/if}}
           {{> googleMap name="mainMap" options=mapOptions}}
         </div>
         <div class="map-info-panel">
