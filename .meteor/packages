@@ -29,6 +29,7 @@ meteor-platform
 kadira:flow-router
 kadira:blaze-layout
 meteorhacks:subs-manager
+http
 
 random
 accounts-password

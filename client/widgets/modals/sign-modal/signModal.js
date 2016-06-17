@@ -28,37 +28,43 @@ Template.signModal.events({
       password: $('#password').val(),
     }
 
-    Meteor.loginWithPassword(user.email, user.password, function(error) {
-      console.log('loginWithPassword error', error)
+    Meteor.call('loginApi', user, function(error, data) {
       if(error) {
         template.errorLabel.set('login fail - ' + error.reason);
-      }else {
+      } else if(_.isEmpty(data.data)) {
+        template.errorLabel.set('login fail - ' + data.message);
+      } else {
+        setLoginUser(data.data);
+        loginUser.set(getLoginUser());
+        sAlert.success('login success!', {position: 'top', timeout: 4000});
         template.errorLabel.set(null);
         $('#signModal').modal('hide');
       }
+
     })
   },
 
   'click #registerBtn': function (event, template) {
 
     var user = {
-      username: $('#username').val(),
+      name: $('#username').val(),
       email: $('#email').val(),
       password: $('#password').val(),
     }
 
-    Accounts.createUser(user, function(error) {
-
+    Meteor.call('signupApi', user, function(error, data) {
       if(error) {
-        template.errorLabel.set('create fail - ' + error.reason);
+        template.errorLabel.set('signup fail - ' + error.reason);
+      } else if(_.isEmpty(data.data)) {
+        template.errorLabel.set('signup fail - ' + data.message);
       } else {
-        sAlert.success('success create user!', {position: 'top', timeout: 4000});
+
+        setLoginUser(data.data);
+        loginUser.set(getLoginUser());
+        sAlert.success('signup success!', {position: 'top', timeout: 4000});
         template.errorLabel.set(null);
         $('#signModal').modal('hide');
       }
-    });
-
-
+    })
   },
-
 });

@@ -8,7 +8,7 @@ Meteor.methods({
 
   comment (id, post) {
     post.parent = id;
-    post.type = 'COMMENT';
+    post.type = 'POST';
     post.owner = Meteor.user();
     post.createdAt = new Date();
 
@@ -36,6 +36,5 @@ Meteor.methods({
     } catch(e) {
       console.log('error ', e);
     }
-
   }
 })

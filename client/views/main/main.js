@@ -2,13 +2,13 @@ var query = new ReactiveVar({});
 var address = new ReactiveVar("");
 var width = new ReactiveVar(null);
 
+var mainPosts = new ReactiveVar([]);
 
 var whichByKeyup = 0;
 var isFirstLoad = true;
 var gmap = {}
 var currentPosition = null;
 var prevCenterMarker = null;
-
 
 Template.googleMap.onRendered(function(){
   GoogleMaps.ready('mainMap', function(map) {
@@ -29,6 +29,10 @@ Template.main.onRendered(function() {
 });
 
 Template.main.helpers({
+  currentUser() {
+    return loginUser.get().userId;
+  },
+
   isGeolocation() {
     return Geolocation != null && Geolocation.latLng() != null
   },
@@ -45,9 +49,7 @@ Template.main.helpers({
   },
 
   channels() {
-    var tQuery = query.get();
-    tQuery.type = 'POST';
-    return Channel.find(tQuery, {sort: {createdAt: -1}});
+    return mainPosts.get();
   },
 
   email() {
@@ -100,21 +102,35 @@ Template.main.events({
     e.preventDefault();
     var post = {
       type: 'POST',
-      owner: Meteor.user(),
-      text: $('#post-create-textarea').val(),
+      owner: loginUser.get().userId,
+      name: $('#post-create-textarea').val(),
       createdAt: new Date(),
       latitude: gmap.getCenter().lat(),
       longitude: gmap.getCenter().lng()
     }
 
     $('#post-create-textarea').val('')
-    Channel.insert(post)
 
+    if(loginUser.get()) {
+      Meteor.call('createPostApi', post, loginUser.get().token, function(error, data) {
+
+        if(error) {
+          sAlert.error('create fail! - ' + error.reason, {position: 'top', timeout: 4000});
+        } else if(_.isEmpty(data.data)) {
+          sAlert.error('create fail! - ' + data.message, {position: 'top', timeout: 4000});
+        } else {
+          var posts = mainPosts.get();
+          posts.unshift(data.data)
+          mainPosts.set(posts);
+        }
+      })
+    }
   },
 
   'click #postCreateForm': function (e, t) {
     e.preventDefault();
-    if(Meteor.userId()) {
+
+    if(loginUser.get().token) {
 
     } else {
       $('#signModal').modal('show');
@@ -124,7 +140,9 @@ Template.main.events({
 
   'click #logout': function (e, t) {
     e.preventDefault();
-    Meteor.logout();
+
+    resetLoginUser();
+    loginUser.set(getLoginUser());
   },
 
   'keydown #post-create-textarea': function(e, t) {
@@ -182,29 +200,22 @@ function toCurrentPosition(gmap) {
   });
 }
 
-
 function findMainPosts(gmap) {
   var bounds = gmap.getBounds();
-  var latLng = {
-    lat: {
-      min: bounds.H.H,
-      max: bounds.H.j
-    },
-    lng: {
-      min: bounds.j.j,
-      max: bounds.j.H
-    }
-  }
-
   if(bounds) {
     query.set({
-      latitude:   { $gte: latLng.lat.min, $lte: latLng.lat.max},
-      longitude:  { $gte: latLng.lng.min, $lte: latLng.lng.max},
+      minLatitude: bounds.H.H,
+      maxLatitude: bounds.H.j,
+      minLongitude: bounds.j.j,
+      maxLongitude: bounds.j.H
     })
   }
-
-  Meteor.subscribe('findMainPosts', query.get())
+  //Meteor.subscribe('findMainPosts', query.get())
+  Meteor.call('findMainPostsApi', query.get(), function(error, data) {
+    mainPosts.set(data.data)
+  })
 }
+
 
 function getAddress(gmap) {
   var center = {

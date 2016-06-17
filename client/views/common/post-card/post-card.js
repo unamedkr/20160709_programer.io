@@ -9,22 +9,6 @@ Template.postCard.helpers({
   comments() {
     return Channel.find({parent: this._id}, {sort: {createdAt: -1}})
   },
-  owner() {
-    if(this.owner) {
-      var oid = new Meteor.Collection.ObjectID(this.owner._str);
-      return Channel.findOne(oid);
-    } else {
-      return {}
-    }
-  },
-  name() {
-    if(this.owner) {
-      return this.owner.username? this.owner.username : this.owner.emails[0].address
-    } else {
-      return "";
-    }
-
-  },
   photo() {
     if(this.photos[0]) {
       return this.photos[0];
@@ -70,7 +54,7 @@ Template.postCard.events({
 
       if(text) {
         var post = {
-          text: text,
+          name: name,
           latitude: this.latitude,
           longitude: this.longitude
         }

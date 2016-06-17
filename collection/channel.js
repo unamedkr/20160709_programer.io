@@ -17,9 +17,11 @@ if(Meteor.isServer) {
   })
 
   Meteor.publish('findMainPosts', (query) => {
-    return Channel.find(query, {sort: {createdAt: -1}, limit: 50});
+    query.keywords = 'programer';
+    query.type = 'POST'
+    query.parent = { $ne : null }
+    return Channel.find(query, {sort: {createdAt: -1}, limit: 10});
   })
-
 }
 
 if(Meteor.isServer) {
