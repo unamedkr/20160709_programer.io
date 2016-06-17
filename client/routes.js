@@ -1,19 +1,32 @@
 
-
 FlowRouter.route('/', {
   action: function() {
-    BlazeLayout.render("mainLayout", {content: "index"});
+
+    if(isProductionMode() && !isHTTPS()){
+      switchHTTPS();
+    } else {
+      BlazeLayout.render("mainLayout", {content: "index"});
+    }
   }
 });
 
 FlowRouter.route('/main', {
   action: function() {
-    BlazeLayout.render("mainLayout", {content: "main"});
+
+    if(isProductionMode() && !isHTTPS()){
+      switchHTTPS();
+    } else {
+      BlazeLayout.render("mainLayout", {content: "main"});
+    }
   }
 });
 
 FlowRouter.route('/invite', {
   action: function() {
-    BlazeLayout.render("mainLayout", {content: "invite"});
+    if(isProductionMode() && !isHTTPS()){
+      switchHTTPS();
+    } else {
+      BlazeLayout.render("mainLayout", {content: "invite"});
+    }
   }
 });
