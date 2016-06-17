@@ -62,11 +62,11 @@ Template.postCard.events({
     }
   },
 
-  'keyup #commentText': function (e) {
+  'keyup [name=commentText]': function (e) {
     e.preventDefault();
 
     if(e.which == 13) {
-      var text = $('#commentText').val();
+      var text = $('#'+this._id).val();
 
       if(text) {
         var post = {
